@@ -474,10 +474,13 @@ class UnitTestPossibleMoves {
     }
 
     /*
-    * THIS TEST SHOULD FAIL!
+    * Checks if a king is the last card in a
+    * block it is not moved to another
+    * empty block and the move array is
+    * therefore empty
     * */
     @Test
-    fun moveBlockToBlock5() {
+    fun dontMoveKingToEmptyBlockIfLast() {
         initializeBlocks()
 
         val detect2 = Card(13, 's')
@@ -494,22 +497,104 @@ class UnitTestPossibleMoves {
 
 
         val moves = GameLogic.allPossibleMoves(foundation, blocks)
+        assertEquals(moves.size, 0)
+
+        assertEquals(blocks[6].size, 1)
+        assertEquals(blocks[6].last(), detect2)
+
+    }
+
+    /*
+    * Checks both if a king is not the last card in a
+    * block or if it is the last card the correct
+    * king is moved
+    * */
+    @Test
+    fun moveKingIfNotLast() {
+        initializeBlocks()
+
+        val detect1 = Card(13, 's')
+        blocks[6].add(detect1)
+
+        val detect2 = Card(1, 'd')
+        val detect3 = Card(13, 'c')
+        blocks[1].add(detect2)
+        blocks[1].add(detect3)
+
+        val detect4 = Card(5, 'c')
+        val detect5 = Card(6, 'h')
+
+        blocks[2].add(detect4)
+        blocks[2].add(detect5)
+
+        assertEquals(blocks[1].size, 2)
+        assertEquals(blocks[2].size, 2)
+        assertEquals(blocks[6].size, 1)
+
+        val moves = GameLogic.allPossibleMoves(foundation, blocks)
+
         assertEquals(moves.size, 1)
-        assertEquals(moves[0], Move(false, Card(13, 's'), 6, 0))
+        assertEquals(moves[0], Move(false, Card(13, 'c'), 1, 0))
 
+        assertEquals(blocks[6].size, 1)
+        assertEquals(blocks[6].last(), detect1)
 
-        val game = Game()
+    }
 
+    /*
+   * Checks both if multiple kings are not the last card in a
+   * block or if it is the last card the correct
+   * king is moved
+   * */
+    @Test
+    fun moveKingIfNotLast2() {
+        initializeBlocks()
 
-        assertEquals(blocks[0].size, 0)
+        val detect1 = Card(13, 's')
+        blocks[0].add(detect1)
 
-        game.moveFromBlockToBlock(moves[0], blocks, null)
+        val detect2 = Card(1, 'd')
+        val detect3 = Card(13, 'c')
+        blocks[1].add(detect2)
+        blocks[1].add(detect3)
 
+        val detect4 = Card(5, 'c')
+        val detect5 = Card(6, 'h')
+
+        blocks[2].add(detect4)
+        blocks[2].add(detect5)
+
+        val detect6 = Card(3, 'h')
+        val detect7 = Card(2, 'c')
+        val detect8 = Card(13, 'd')
+
+        blocks[3].add(detect6)
+        blocks[3].add(detect7)
+        blocks[3].add(detect8)
 
         assertEquals(blocks[0].size, 1)
-        assertEquals(blocks[0].last(), detect2)
+        assertEquals(blocks[1].size, 2)
+        assertEquals(blocks[2].size, 2)
+        assertEquals(blocks[3].size, 3)
 
-        assertEquals(blocks[6].size, 0)
+        val moves = GameLogic.allPossibleMoves(foundation, blocks)
+
+        val move1 = Move(true, Card(13, 'c'), 0, 4)
+        val move2 = Move(true, Card(13, 'd'), 3, 4)
+
+        assertEquals(moves.contains(move1), true)
+        assertEquals(moves.contains(move2), true)
+        assertEquals(moves.size, 2)
+
+
+        assertEquals(blocks[6].size, 1)
+        assertEquals(blocks[6].last(), detect1)
+
+        assertEquals(blocks[1].size, 1)
+        assertEquals(blocks[1].last(), detect2)
+
+        assertEquals(blocks[3].size, 2)
+        assertEquals(blocks[1].last(), detect7)
 
     }
 
