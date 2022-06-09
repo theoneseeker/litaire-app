@@ -38,7 +38,7 @@ class GameLogic {
                 } else {
                     //check if lastcard is a king and if it is placed the furthest to the
                     // back then do not move it
-                    if (lastCard.value.toInt() == 13 && block[0] == lastCard) {
+                    if (lastCard.value.toInt() == 13 && block[0] == lastCard || block[0].value.toInt() == 13) {
                         continue
                     } else {
                         for (k in foundations.indices) {
