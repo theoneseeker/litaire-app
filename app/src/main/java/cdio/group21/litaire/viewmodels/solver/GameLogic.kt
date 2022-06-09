@@ -36,18 +36,23 @@ class GameLogic {
                     possibleMoves.add(newMove)
 
                 } else {
-                    for (k in foundations.indices) {
-                        val foundation = foundations[k]
-                        if (evalBlockToFoundation(foundation, lastCard)) {
+                    //check if lastcard is a king and if it is placed the furthest to the
+                    // back then do not move it
+                    if (block[0].value.toInt() == 13) {
+                        continue
+                    } else {
+                        for (k in foundations.indices) {
+                            val foundation = foundations[k]
+                            if (evalBlockToFoundation(foundation, lastCard)) {
 
-                            val newMove = Move(true, lastCard, indexBlock.toByte(), k.toByte())
-                            possibleMoves.add(newMove)
+                                val newMove = Move(true, lastCard, indexBlock.toByte(), k.toByte())
+                                possibleMoves.add(newMove)
+                            }
                         }
+                        possibleMovesFromBlockToBlock(block, blocks, indexBlock, possibleMoves)
                     }
+
                 }
-
-                possibleMovesFromBlockToBlock(block, blocks, indexBlock, possibleMoves)
-
             }
 
             return possibleMoves
